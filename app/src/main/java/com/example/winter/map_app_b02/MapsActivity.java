@@ -11,6 +11,8 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -39,11 +41,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //Sets up map settings
         mMap = googleMap;
         mUiSettings = mMap.getUiSettings();
-
         mUiSettings.setZoomControlsEnabled(true);
-        // Add a marker in Sydney and move the camera
+
+        //Sets up markers
+        ArrayList<ParkingMeterData> meters = new ArrayList<>();
+        /*
+        id;
+        isAvailable;
+        timeTillAvailble;
+        price;
+        timePerUse;
+        latlng;
+        address;
+        */
+
         LatLng dillionAddress = new LatLng(31.7942, -85.9452);
         LatLng universityAvenue = new LatLng(31.7988, -85.957);
         LatLng walmartAddress = new LatLng(31.7789, -85.9411);
