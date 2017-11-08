@@ -1,7 +1,9 @@
 package com.example.winter.map_app_b02;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,11 +11,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private UiSettings mUiSettings;
@@ -48,6 +51,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Sets up markers
         ArrayList<ParkingMeterData> meters = new ArrayList<>();
+        int numberOfMeters = 4;
+        for(int i = 0; i < numberOfMeters; i++){
+            meters.add(putDataintoMeter(i));
+        }
         /*
         id;
         isAvailable;
@@ -63,50 +70,77 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng walmartAddress = new LatLng(31.7789, -85.9411);
         LatLng tcAddress = new LatLng(31.8018, -85.9554);
 
+
+
         mMap.addMarker(new MarkerOptions()
-                .position(dillionAddress)
-                .title("Dillion's Meter")
-                .snippet("id: 11111\n" +
-                        "Street addres: " +
-                        "\tLINE 1: 205 S Franklin Dr\n" +
-                        "\tLINE 2: \n" +
-                        "\tTroy, AL 36081 \n" +
-                        "In use?: YES\n" +
-                        "Is Active for user?: YES\n" +
-                        "How much longer is active: 1 hour"));
+                .position(meters.get(0).getLatlng())
+                .title("Currently Available: " + ( meters.get(0).isAvailable()? "YES" : "NOPE" ))
+                .snippet("Minutes until availble: " + meters.get(0).getTimeTillAvailble()));
         mMap.addMarker(new MarkerOptions()
-                .position(universityAvenue)
-                .title("Class's Meter")
-                .snippet("id: 11112\n" +
-                        "Street addres: " +
-                        "\tLINE 1:\n" +
-                        "\tLINE 2: \n" +
-                        "\t\n" +
-                        "In use?: NO\n" +
-                        "Is Active for user?: NO\n" +
-                        "How much longer is active: N/A"));
+                .position(meters.get(1).getLatlng())
+                .title("Currently Available: " + ( meters.get(1).isAvailable()? "YES" : "NOPE" ))
+                .snippet("Minutes until availble: " + meters.get(1).getTimeTillAvailble()));
         mMap.addMarker(new MarkerOptions()
-                .position(walmartAddress)
-                .title("Walmart's Meter")
-                .snippet("id: 11113\n" +
-                        "Street addres: " +
-                        "\tLINE 1:\n" +
-                        "\tLINE 2: \n" +
-                        "\t\n" +
-                        "In use?: NO\n" +
-                        "Is Active for user?: NO\n" +
-                        "How much longer is active: N/A"));
+                .position(meters.get(2).getLatlng())
+                .title("Currently Available: " + ( meters.get(2).isAvailable()? "YES" : "NOPE" ))
+                .snippet("Minutes until availble: " + meters.get(2).getTimeTillAvailble()));
         mMap.addMarker(new MarkerOptions()
-                .position(tcAddress)
-                .title("TC's Meter")
-                .snippet("id: 11114\n" +
-                        "Street addres: " +
-                        "\tLINE 1:\n" +
-                        "\tLINE 2: \n" +
-                        "\t\n" +
-                        "In use?: NO\n" +
-                        "Is Active for user?: NO\n" +
-                        "How much longer is active: N/A"));
+                .position(meters.get(3).getLatlng())
+                .title("Currently Available: " + ( meters.get(3).isAvailable()? "YES" : "NOPE" ))
+                .snippet("Minutes until availble: " + meters.get(3).getTimeTillAvailble()));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(universityAvenue));
+
+        //Make the Marker's infoWindow clickable
+        mMap.setOnInfoWindowClickListener(this);
+    }
+
+    public ParkingMeterData putDataintoMeter(int meterNumber){
+        ParkingMeterData pmd = new ParkingMeterData();
+        switch (meterNumber){
+            case 0: pmd.setId(111111);  //My address
+                pmd.setAvailable(true);
+                pmd.setTimeTillAvailble(0);
+                pmd.setPrice(5.2);
+                pmd.setTimePerUse(45);
+                pmd.setLatlng(new LatLng(31.7942, -85.9452));
+                pmd.setAddress("205 S Franklin Dr\n36081\nTroy\nAlabama");
+                break;
+            case 1: pmd.setId(111112);  //University Avenue
+                pmd.setAvailable(false);
+                pmd.setTimeTillAvailble(15);
+                pmd.setPrice(10);
+                pmd.setTimePerUse(45);
+                pmd.setLatlng(new LatLng(31.7988, -85.957));
+                pmd.setAddress("205 S Franklin Dr\n36081\nTroy\nAlabama");
+                break;
+            case 2: pmd.setId(111113);  //Walmart
+                pmd.setAvailable(true);
+                pmd.setTimeTillAvailble(0);
+                pmd.setPrice(4.55);
+                pmd.setTimePerUse(30);
+                pmd.setLatlng(new LatLng(31.7789, -85.9411));
+                pmd.setAddress("205 S Franklin Dr\n36081\nTroy\nAlabama");
+                break;
+            case 3: pmd.setId(111114);  //TC
+                pmd.setAvailable(false);
+                pmd.setTimeTillAvailble(30);
+                pmd.setPrice(3);
+                pmd.setTimePerUse(60);
+                pmd.setLatlng(new LatLng(31.8018, -85.9554));
+                pmd.setAddress("205 S Franklin Dr\n36081\nTroy\nAlabama");
+                break;
+        }
+        return pmd;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, marker.getSnippet(),
+                Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(MapsActivity.this, MeterActivity.class);
+        startActivity(intent);
+        finish();
+        setContentView(R.layout.activity_meter);
     }
 }

@@ -15,7 +15,7 @@ public class ParkingMeterData {
     price
     timePerUse
     address
-
+    LatLng
      */
 
     private int id;
