@@ -74,6 +74,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .position(meters.get(3).getLatlng())
                 .title("Currently Available: " + ( meters.get(3).isAvailable()? "YES" : "NOPE" ))
                 .snippet("Minutes until available: " + meters.get(3).getTimeTillAvailble()));
+        //Sets default location of the map
+        //TODO change to user's location
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(meters.get(3).getLatlng(), 14.0f));
 
         //Make the Marker's infoWindow clickable
