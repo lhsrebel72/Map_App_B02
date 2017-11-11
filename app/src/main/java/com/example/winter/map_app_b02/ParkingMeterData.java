@@ -1,12 +1,15 @@
 package com.example.winter.map_app_b02;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by WINTER on 11/6/2017.
  */
 
-public class ParkingMeterData {
+public class ParkingMeterData implements Parcelable{
     /*
     Possible things to add:
     id
@@ -28,6 +31,19 @@ public class ParkingMeterData {
 
     public ParkingMeterData(){
 
+    }
+
+    public ParkingMeterData(Parcel in){
+        String[] data = new String[8];
+        in.readStringArray(data);
+
+        this.id = Integer.parseInt(data[0]);
+        this.isAvailable = Boolean.parseBoolean(data[1]);
+        this.timeTillAvailble = Integer.parseInt(data[2]);
+        this.price = Double.parseDouble(data[3]);
+        this.timePerUse = Integer.parseInt(data[4]);
+        this.latlng = new LatLng(Double.parseDouble(data[5]), Double.parseDouble(data[6]));
+        this.address = data[7];
     }
 
     public int getId() {
@@ -84,5 +100,23 @@ public class ParkingMeterData {
 
     public void setLatlng(LatLng latlng) {
         this.latlng = latlng;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeStringArray(new String[]
+                {Integer.toString(this.id),
+                Boolean.toString(this.isAvailable),
+                String.valueOf(this.timeTillAvailble),
+                Double.toString(this.price),
+                Integer.toString(this.timePerUse),
+                Double.toString(this.latlng.latitude),
+                Double.toString(this.latlng.longitude),
+                this.address});
     }
 }

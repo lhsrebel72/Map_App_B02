@@ -14,12 +14,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private UiSettings mUiSettings;
+    private ParkingMeterData selectedMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -55,40 +56,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for(int i = 0; i < numberOfMeters; i++){
             meters.add(putDataintoMeter(i));
         }
-        /*
-        id;
-        isAvailable;
-        timeTillAvailble;
-        price;
-        timePerUse;
-        latlng;
-        address;
-        */
 
-        LatLng dillionAddress = new LatLng(31.7942, -85.9452);
-        LatLng universityAvenue = new LatLng(31.7988, -85.957);
-        LatLng walmartAddress = new LatLng(31.7789, -85.9411);
-        LatLng tcAddress = new LatLng(31.8018, -85.9554);
-
-
-
+        //Puts markers on the map
         mMap.addMarker(new MarkerOptions()
                 .position(meters.get(0).getLatlng())
                 .title("Currently Available: " + ( meters.get(0).isAvailable()? "YES" : "NOPE" ))
-                .snippet("Minutes until availble: " + meters.get(0).getTimeTillAvailble()));
+                .snippet("Minutes until available: " + meters.get(0).getTimeTillAvailble()));
         mMap.addMarker(new MarkerOptions()
                 .position(meters.get(1).getLatlng())
                 .title("Currently Available: " + ( meters.get(1).isAvailable()? "YES" : "NOPE" ))
-                .snippet("Minutes until availble: " + meters.get(1).getTimeTillAvailble()));
+                .snippet("Minutes until available: " + meters.get(1).getTimeTillAvailble()));
         mMap.addMarker(new MarkerOptions()
                 .position(meters.get(2).getLatlng())
                 .title("Currently Available: " + ( meters.get(2).isAvailable()? "YES" : "NOPE" ))
-                .snippet("Minutes until availble: " + meters.get(2).getTimeTillAvailble()));
+                .snippet("Minutes until available: " + meters.get(2).getTimeTillAvailble()));
         mMap.addMarker(new MarkerOptions()
                 .position(meters.get(3).getLatlng())
                 .title("Currently Available: " + ( meters.get(3).isAvailable()? "YES" : "NOPE" ))
-                .snippet("Minutes until availble: " + meters.get(3).getTimeTillAvailble()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(universityAvenue));
+                .snippet("Minutes until available: " + meters.get(3).getTimeTillAvailble()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(meters.get(3).getLatlng(), 14.0f));
 
         //Make the Marker's infoWindow clickable
         mMap.setOnInfoWindowClickListener(this);
@@ -135,12 +121,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, marker.getSnippet(),
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, marker.getSnippet(), Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(MapsActivity.this, MeterActivity.class);
+        //intent.putExtra("ParkingMeterData", marker);
         startActivity(intent);
-        finish();
-        setContentView(R.layout.activity_meter);
+        //finish();
+        //setContentView(R.layout.activity_meter);
     }
 }
